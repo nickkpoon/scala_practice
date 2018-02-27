@@ -40,22 +40,14 @@ object Main {
 
     //print out elements inside
     stringList.foreach{println}
-    println("working function ! !!  ")
-
-    stringList.foreach{x => println(indirectMap(x))}
-
-
     println("printing in specific element")
-
     println(stringList(1))
 
 
-    //println(smallStringList)
-    //println(xs)
-    //println(xsss)
+    //QUESTION 1 PART 1 COMPLETE!!!
+    println("\n\nworking function ! ! !")
 
-    //println(function1)
-
+    stringList.foreach{x => println(indirectMap(x))}
   }
 
 
