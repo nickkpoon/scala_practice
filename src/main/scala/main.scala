@@ -1,5 +1,7 @@
 package Base
 import scala.io.Source
+import scala.collection.mutable.ListBuffer
+
 
 object Main {
   def main(argv: Array[String]) {
@@ -17,12 +19,19 @@ object Main {
     /*val smallStringList: List[String] = SExprParser.parseList[String](stringList)
 
 
-println("the size of the string list is: " + stringListSize)
-println("the length of the string list is: " + stringListLength)
-println(stringList)
-println(singlyStringList)
-println(stringFunction)*/
+      println("the size of the string list is: " + stringListSize)
+      println("the length of the string list is: " + stringListLength)
+      println(stringList)
+      println(singlyStringList)
+      println(stringFunction)
 
+      */
+    //print out elements inside
+    /* println("printing for each")
+     stringList.foreach{println}
+
+     println("printing in specific element")
+     println(stringList(1))*/
 
     val filename = "/Users/nickkpoon/IdeaProjects/a_3/src/main/scala/input.txt"
     val fileContents = Source.fromFile(filename).getLines.mkString
@@ -32,7 +41,13 @@ println(stringFunction)*/
     //val xsss = xss.map{ _ * 2 }
 
     val stringList: List[List[String]] = SExprParser.parseList[List[String]](fileContents).get
+
+    /*println(stringList.mkString)
     val singlyStringList = stringList.flatten
+
+    println("printing list . . .")
+    println(stringList)
+
 
     println("printing first element from list . . .")
     val firstElem: String = singlyStringList(0)
@@ -47,21 +62,16 @@ println(stringFunction)*/
     val stringListSize = stringList.size
     val stringListLength = stringList.length
 
-    //print out elements inside
-    println("printing for each")
-    stringList.foreach{println}
 
-    println("printing in specific element")
-    println(stringList(1))
 
     //QUESTION 1 PART 1 COMPLETE!!!
     println("\n\nworking function ! ! !")
 
     //stringList.foreach{x => println(indirectMap(x))}
 
-    //pickList(stringList)
+    //pickList(stringList)*/
 
-    determineType(getFirstElem(flattenNestedList(stringList)))
+    indirectMap(getFirstElem(flattenNestedList(stringList)))
 
 
 
@@ -78,21 +88,42 @@ println(stringFunction)*/
     a(0)
   }
 
-  def determineType(a: String) : Unit =
+  def indirectMap(a: String) : Unit =
   {
     val filename = "/Users/nickkpoon/IdeaProjects/a_3/src/main/scala/input.txt"
     val fileContents = Source.fromFile(filename).getLines.mkString
 
+
     if(isNumeric(a))
       {
         val intList: List[List[Int]] = SExprParser.parseList[List[Int]](fileContents).get
-        intList.foreach{x => println(indirectMapInt(x))}
+        //intList.foreach{x => println(indirectMapInt(x))}
+        handleInt(intList)
       }
     else
       {
         val stringList: List[List[String]] = SExprParser.parseList[List[String]](fileContents).get
-        stringList.foreach{x => println(indirectMapString(x))}
+        //stringList.foreach{x => println(indirectMapString(x))}
+        handleString(stringList)
       }
+  }
+
+  def handleInt(a:List[List[Int]]) : Unit =
+  {
+    val intBuffer = new ListBuffer[List[Int]]
+    a.foreach{x => intBuffer+=(indirectMapInt(x))}
+
+    println(intBuffer.toList)
+
+  }
+
+  def handleString(a:List[List[String]]) : Unit =
+  {
+    val StringBuffer = new ListBuffer[List[String]]
+    a.foreach{x => StringBuffer+=(indirectMapString(x))}
+
+    println(StringBuffer.toList)
+
   }
 
 
