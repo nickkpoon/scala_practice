@@ -1,5 +1,4 @@
 package Base
-
 import scala.io.Source
 
 object Main {
@@ -14,65 +13,129 @@ object Main {
     val xs: List[List[Int]] = SExprParser.parseList[List[Int]](fileContents).get
     println(xs)*/
 
+
+    /*val smallStringList: List[String] = SExprParser.parseList[String](stringList)
+
+
+println("the size of the string list is: " + stringListSize)
+println("the length of the string list is: " + stringListLength)
+println(stringList)
+println(singlyStringList)
+println(stringFunction)*/
+
+
     val filename = "/Users/nickkpoon/IdeaProjects/a_3/src/main/scala/input.txt"
     val fileContents = Source.fromFile(filename).getLines.mkString
+
     //val xs: List[List[Int]] = SExprParser.parseList[List[Int]](fileContents).get
     //val xss = xs.flatten
     //val xsss = xss.map{ _ * 2 }
 
     val stringList: List[List[String]] = SExprParser.parseList[List[String]](fileContents).get
     val singlyStringList = stringList.flatten
-    //val function1 = indirectMap(xsss)
-    val stringFunction = indirectMap(singlyStringList)
+
+    println("printing first element from list . . .")
+    val firstElem: String = singlyStringList(0)
+
+
+    if(isNumeric(getFirstElem(flattenNestedList(stringList))))
+    println("YEYE IT iS")
+    else
+      println("NAH")
+    //val stringFunction = indirectMap(singlyStringList)
 
     val stringListSize = stringList.size
     val stringListLength = stringList.length
 
-    //val smallStringList: List[String] = SExprParser.parseList[String](stringList)
-
-    println("the size of the string list is: " + stringListSize)
-    println("the length of the string list is: " + stringListLength)
-    println(stringList)
-    println(singlyStringList)
-    println(stringFunction)
-
-    println("printing for each")
-
     //print out elements inside
+    println("printing for each")
     stringList.foreach{println}
+
     println("printing in specific element")
     println(stringList(1))
-
 
     //QUESTION 1 PART 1 COMPLETE!!!
     println("\n\nworking function ! ! !")
 
-    stringList.foreach{x => println(indirectMap(x))}
+    //stringList.foreach{x => println(indirectMap(x))}
+
+    //pickList(stringList)
+
+    determineType(getFirstElem(flattenNestedList(stringList)))
+
+
+
+
+  }
+
+  def flattenNestedList(a:List[List[String]]) : List[String] =
+  {
+    a.flatten
+  }
+
+  def getFirstElem(a:List[String]) : String =
+  {
+    a(0)
+  }
+
+  def determineType(a: String) : Unit =
+  {
+    val filename = "/Users/nickkpoon/IdeaProjects/a_3/src/main/scala/input.txt"
+    val fileContents = Source.fromFile(filename).getLines.mkString
+
+    if(isNumeric(a))
+      {
+        val intList: List[List[Int]] = SExprParser.parseList[List[Int]](fileContents).get
+        intList.foreach{x => println(indirectMapInt(x))}
+      }
+    else
+      {
+        val stringList: List[List[String]] = SExprParser.parseList[List[String]](fileContents).get
+        stringList.foreach{x => println(indirectMapString(x))}
+      }
   }
 
 
-  //def indirectMap(A:List[Int] => List[Int]) : Int =
-  //{}
+  def pickList(a: Any) = a match
+    {
+    case a: List[String] => println("ISSA STRING LIST")
+    case a: List[Int] => println("ISSA INT LIST")
+  }
 
-  /*def indirectMap(a: List[Int]) =
-    a.map{_ * 2}*/
-
-  def indirectMap(f: List[String]) =
+  def indirectMapString(f: List[String]) : List[String] =
     f.map(reverse)
 
-  /*def indirectMap(a: List[Either[String,Int]]): Unit =
+  def indirectMapInt(f: List[Int]) : List[Int] =
+    f.map{_*2}
+
+  def matchTypes(a: Any) = a match
   {
-    a match
-    {
-      case List[Int] =>
-    }
-
-  }*/
-
+    case a: String => reverse(a)
+    case a: Int => double(a)
+  }
+  //helper function for reversing strings within list
   def reverse(s: String): String =
   {
     s.reverse
   }
 
+  def double(i: Int): Int =
+  {
+    i * 2
+  }
+
+
+  //helper function to check if content is numeric
+  def isNumeric(input: String): Boolean = input.forall(_.isDigit)
+
+
+
+
   //def zip (A:Int => Int)
  }
+
+
+
+
+
+
