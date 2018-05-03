@@ -2,169 +2,310 @@ package Base
 import scala.io.Source
 import scala.collection.mutable.ListBuffer
 
+object main {
+  def main(args: Array[String]){
 
-object Main {
-  def main(argv: Array[String]) {
-    /*SExprParser.parseRope[Int]("(+ (list 1 2 3 4 5) (+ (list 6) (list 7)))") match {
-      case Some(matched) => println(matched)
-      case _ => println("no good")*/
+    println("Problem 1: ")
+    problem1;
 
+    println("Problem 2: ")
+    problem2;
 
-    /*val filename = "/Users/nickkpoon/IdeaProjects/a_3/src/main/scala/input.txt"
-    val fileContents = Source.fromFile(filename).getLines.mkString
-    val xs: List[List[Int]] = SExprParser.parseList[List[Int]](fileContents).get
-    println(xs)*/
+    println("Problem 3: ")
+    problem3;
 
+    println("Problem 4: ")
+    problem4;
 
-    /*val smallStringList: List[String] = SExprParser.parseList[String](stringList)
+    println("Problem 5: ")
+    problem5;
 
+    println("Problem 6: ")
+    problem6;
 
-      println("the size of the string list is: " + stringListSize)
-      println("the length of the string list is: " + stringListLength)
-      println(stringList)
-      println(singlyStringList)
-      println(stringFunction)
+    println("Problem 7: ")
+    problem7;
 
-      */
-    //print out elements inside
-    /* println("printing for each")
-     stringList.foreach{println}
+    println("Problem 8: ")
+    problem8;
 
-     println("printing in specific element")
-     println(stringList(1))*/
+  }
 
-    val filename = "/Users/nickkpoon/IdeaProjects/a_3/src/main/scala/input.txt"
-    val fileContents = Source.fromFile(filename).getLines.mkString
+  def problem1: Unit =
+  {
 
-    //val xs: List[List[Int]] = SExprParser.parseList[List[Int]](fileContents).get
-    //val xss = xs.flatten
-    //val xsss = xss.map{ _ * 2 }
+    println("Input List[List[Int]]: ")
 
-    val stringList: List[List[String]] = SExprParser.parseList[List[String]](fileContents).get
+    val p1intInput = scala.io.StdIn.readLine()
+    println(p1intInput)
 
-    /*println(stringList.mkString)
-    val singlyStringList = stringList.flatten
+    println("Input List[List[String]]: ")
 
-    println("printing list . . .")
-    println(stringList)
+    val p1stringInput = scala.io.StdIn.readLine()
+    println(p1stringInput)
 
-
-    println("printing first element from list . . .")
-    val firstElem: String = singlyStringList(0)
+    //(list (list foo bar baz) (list foo foo foo))
+    val integer: List[List[Int]] = SExprParser.parseList[List[Int]]( p1intInput ).get
+    val integerList = indirectMap[Int, Int](x => x*2, integer)
 
 
-    if(isNumeric(getFirstElem(flattenNestedList(stringList))))
-    println("YEYE IT iS")
+    val string : List[List[String]] = SExprParser.parseList[List[String]]( p1stringInput ).get
+    val stringList = indirectMap[String, String](_.reverse, string)
+
+
+    println(SExprPrinter.print[List[List[Int]]](integerList))
+    println(SExprPrinter.print[List[List[String]]](stringList))
+
+  }
+
+  def problem2: Unit =
+  {
+    println("Input List[String]:");
+
+    val p2in1 = scala.io.StdIn.readLine()
+    println(p2in1)
+
+    println("Input List[Int]:")
+
+    val p2in2 = scala.io.StdIn.readLine()
+    println(p2in2)
+
+    //(list 1 2 3 4)
+    //(list foo bar baz)
+    val listA: List[String] = SExprParser.parseList[String]( p2in1 ).get
+    val listB: List[Int] = SExprParser.parseList[Int]( p2in2 ).get
+
+
+    val xform = zip[String, Int](listA, listB)
+    println(SExprPrinter.print[List[(String, Int)]](xform))
+
+  }
+
+  def problem3: Unit =
+  {
+    println("Input List[String]: ")
+    val p3in1 = scala.io.StdIn.readLine()
+    println(p3in1)
+
+
+    val aList: List[String] = SExprParser.parseList[String]( p3in1 ).get
+    val flatList = flatMap[String,Char](splitList, aList)
+
+
+    println("Input List[Int]: ")
+    val p3in2 = scala.io.StdIn.readLine()
+    println(p3in2)
+
+
+    //(list 1 2 5)
+    val fList: List[Int] = SExprParser.parseList[Int]( p3in2 ).get
+    val fiboList = flatMap[Int, Int]( fibonacci , fList )
+
+    println(SExprPrinter.print[List[Char]]( flatList ))
+    println(SExprPrinter.print[List[Int]]( fiboList ))
+
+  }
+
+  def problem4: Unit =
+  {
+
+    println("Input: Rope[Int]");
+    val p4in1 = scala.io.StdIn.readLine()
+    println(p4in1);
+
+    println("Input: Rope[String]")
+    val p4in2 = scala.io.StdIn.readLine()
+    println(p4in2);
+
+    val p4ropeInt = SExprParser.parseRope[Int](p4in1).get
+    val p4ropeStr = SExprParser.parseRope[String](p4in2).get
+
+    println(SExprPrinter.print[Rope[Int]]( mapRope[Int]( double , p4ropeInt ) ))
+    println(SExprPrinter.print[Rope[String]]( mapRope[String]( reverse , p4ropeStr ) ))
+
+  }
+
+  def problem5: Unit =
+  {
+    println("Input: Rope");
+
+    val p5in1 = scala.io.StdIn.readLine()
+    println(p5in1)
+    val p5ropeInt = SExprParser.parseRope[Int]( p5in1 ).get
+    println(foldRope[Int](p5ropeInt))
+
+  }
+
+  def problem6: Unit =
+  {
+    println("Input: Rope")
+
+    val p6in1 = scala.io.StdIn.readLine()
+    println(p6in1)
+
+    val p6ropeInt = SExprParser.parseRope[Int]( p6in1 ).get
+    println(ropeLength[Int](p6ropeInt))
+
+  }
+
+  def problem7: Unit =
+  {
+    println("Input: Rope")
+
+    val p7in = scala.io.StdIn.readLine()
+    println(p7in)
+
+    val p7ropeInt = SExprParser.parseRope[Int]( p7in ).get
+    println(SExprPrinter.print[List[Int]](ropeToList[Int](p7ropeInt)))
+
+  }
+
+  def problem8: Unit =
+  {
+    println("Input String to be reduced: ");
+
+    val sentence = scala.io.StdIn.readLine()
+    println(sentence);
+
+    val reduced = mapReduce[String,Int,String, Int](map, reduce, sentence);
+    reduced.map(a => println(a._1 + ": " + a._2));
+
+
+  }
+
+  /*
+ *
+ *
+  HELPER FUNCTIONS
+  *
+  *
+  */
+
+  /*
+   PROBLEM 1
+  */
+
+  def indirectMap[A, B](function: A => B, listA: List[List[A]] ) =
+  {
+    listA.map(_.map(function(_)))
+  }
+
+
+  /*
+   PROBLEM 2
+  */
+
+  def zip[A, B](listA: List[A], listB: List[B] ) : List[(A,B)]=
+  {
+    if(listA.size > listB.size)
+      listA.slice(0,listB.size)
     else
-      println("NAH")
-    //val stringFunction = indirectMap(singlyStringList)
+      listB.slice(0,listA.size)
 
-    val stringListSize = stringList.size
-    val stringListLength = stringList.length
-
-
-
-    //QUESTION 1 PART 1 COMPLETE!!!
-    println("\n\nworking function ! ! !")
-
-    //stringList.foreach{x => println(indirectMap(x))}
-
-    //pickList(stringList)*/
-
-    indirectMap(getFirstElem(flattenNestedList(stringList)))
-
-
-
-
+    listA.indices.map(i => ( listA(i) , listB(i) ) ).toList
   }
 
-  def flattenNestedList(a:List[List[String]]) : List[String] =
+  /*
+   PROBLEM 3
+  */
+
+  def flatMap[A,B](function: A => List[B], listA : List[A] ) : List[B] =
   {
-    a.flatten
+    listA.map(function(_)).foldLeft(List[B]())((a, b) => a ::: b)
   }
 
-  def getFirstElem(a:List[String]) : String =
+  def splitList(str : String) : List[Char] =
   {
-    a(0)
+    str.toList
   }
 
-  def indirectMap(a: String) : Unit =
+  def fibonacci(num : Int) : List[Int] =
   {
-    val filename = "/Users/nickkpoon/IdeaProjects/a_3/src/main/scala/input.txt"
-    val fileContents = Source.fromFile(filename).getLines.mkString
-
-
-    if(isNumeric(a))
-      {
-        val intList: List[List[Int]] = SExprParser.parseList[List[Int]](fileContents).get
-        //intList.foreach{x => println(indirectMapInt(x))}
-        handleInt(intList)
-      }
-    else
-      {
-        val stringList: List[List[String]] = SExprParser.parseList[List[String]](fileContents).get
-        //stringList.foreach{x => println(indirectMapString(x))}
-        handleString(stringList)
-      }
+    fibHelp(1,1).take(num+1).toList
   }
 
-  def handleInt(a:List[List[Int]]) : Unit =
+  def fibHelp(a: Int, b: Int): Stream[Int] = Stream.cons(a, fibHelp(b, a + b))
+
+
+  /*
+  PROBLEM 4
+   */
+  def mapRope[A](function : A => A, rope : Rope[A]): Rope[A] = rope match
   {
-    val intBuffer = new ListBuffer[List[Int]]
-    a.foreach{x => intBuffer+=(indirectMapInt(x))}
-
-    println(intBuffer.toList)
-
-  }
-
-  def handleString(a:List[List[String]]) : Unit =
-  {
-    val StringBuffer = new ListBuffer[List[String]]
-    a.foreach{x => StringBuffer+=(indirectMapString(x))}
-
-    println(StringBuffer.toList)
-
-  }
-
-
-  def pickList(a: Any) = a match
+    case RConcat(a,b) =>
     {
-    case a: List[String] => println("ISSA STRING LIST")
-    case a: List[Int] => println("ISSA INT LIST")
+      RConcat(mapRope(function, a), mapRope(function, b))
+    }
+    case RList(list) =>
+    {
+      RList(list.map(function(_)))
+    }
   }
 
-  def indirectMapString(f: List[String]) : List[String] =
-    f.map(reverse)
-
-  def indirectMapInt(f: List[Int]) : List[Int] =
-    f.map{_*2}
-
-  def matchTypes(a: Any) = a match
+  def double(x : Int) : Int =
   {
-    case a: String => reverse(a)
-    case a: Int => double(a)
+    x*2
   }
-  //helper function for reversing strings within list
-  def reverse(s: String): String =
+
+  def reverse(x : String) : String =
   {
-    s.reverse
+    x.reverse
   }
 
-  def double(i: Int): Int =
+
+  /*
+  PROBLEM 5
+   */
+  def foldRope[A](rope : Rope[A] ) : String = rope match
   {
-    i * 2
+    case RConcat(a,b) => foldRope(a) + foldRope(b)
+    case RList(list) => list.mkString("")
   }
 
+  /*
+PROBLEM 6
+ */
+  def ropeLength[A](rope : Rope[A] ) : Int = rope match
+  {
+    case RConcat(a,b) => ropeLength(a) + ropeLength(b)
+    case RList(list) => list.foldLeft(0)((sum,_) => sum + 1 )
+  }
 
-  //helper function to check if content is numeric
-  def isNumeric(input: String): Boolean = input.forall(_.isDigit)
+  /*
+PROBLEM 7
+ */
 
+  def ropeToList[A](rope : Rope[A] ) : List[A] = rope match
+  {
+    case RConcat(a,b) => ropeToList(a) ::: ropeToList(b)
+    case RList(list) => list
+  }
 
+  /*
+PROBLEM 8
+*/
 
+  def mapReduce[A,B,C,D](f1: A => List[(C , D)] , f2: ((C, List[D])) => (C, D), r1 : A ) : List[(C, D)] =
+  {
 
-  //def zip (A:Int => Int)
- }
+    val listC = f1(r1).par.groupBy(_._1).mapValues(_.map(_._2)).toList;
 
+    val listD = listC.map(a => (a._1 , a._2.toList))
+
+    listD.map(f2(_))
+  }
+
+  def map(str : String) : List[(String, Int)] =
+  {
+    val listA = str.split(" ").toList
+    listA.map((_, 1))
+  }
+
+  def reduce(tuple : (String, List[Int]) ) : (String, Int) =
+  {
+    ( tuple._1 , tuple._2.foldLeft(0)(_ + _))
+  }
+}
 
 
 
